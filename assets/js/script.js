@@ -5,6 +5,8 @@ const author = document.getElementById("inputBookAuthor")
 const year = document.getElementById("inputBookYear")
 const readed = document.getElementById("inputBookIsComplete")
 const buttonnSubmit = document.getElementById("bookSubmit")
+const keywoardSearch = document.getElementById("searchBookTitle")
+const buttonSearch = document.getElementById("searchSubmit")
 
 window.addEventListener("load", function () {
     if (localStorage.getItem(localStorageKey) !== null) {
@@ -13,7 +15,16 @@ window.addEventListener("load", function () {
     }
 })
 
+function checkComplete(){
+    if(readed.checked){
+        buttonnSubmit.innerHTML = "Masukkan Buku ke rak <span>Selesai dibaca</span>";
+    }else{
+        buttonnSubmit.innerHTML = "Masukkan Buku ke rak <span>Belum selesai dibaca</span>";
+    }
+}
+
 buttonnSubmit.addEventListener("click", function (e) {
+    console.log(buttonnSubmit.id);
     e.preventDefault()
     if (title.value != "" && author.value != "" && year.value != "") {
         if (buttonnSubmit.innerHTML != "Edit buku") {
@@ -159,6 +170,52 @@ function unreadedBook(id) {
     } else {
         return 0
     }
+}
+
+buttonSearch.addEventListener("click", function (e) {
+    e.preventDefault()
+    if (localStorage.getItem(localStorageKey) == null) {
+        return alert("Belum ada data buku !")
+    } else {
+        const getByTitle = getData().filter(a => a.title == keywoardSearch.value.trim());
+        if (getByTitle.length == 0) {
+            const getByAuthor = getData().filter(a => a.author == keywoardSearch.value.trim());
+            if (getByAuthor.length == 0) {
+                const getByYear = getData().filter(a => a.year == keywoardSearch.value.trim());
+                if (getByYear.length == 0) {
+                    alert(`Tidak ditemukan data dengan kata kunci: ${keywoardSearch.value}`)
+                } else {
+                    showSearchResult(getByYear);
+                }
+            } else {
+                showSearchResult(getByAuthor);
+            }
+        } else {
+            showSearchResult(getByTitle);
+        }
+    }
+
+    keywoardSearch.value = ''
+})
+
+function showSearchResult(books) {
+    const searchResult = document.getElementById("searchResult")
+
+    searchResult.innerHTML = ''
+
+    books.forEach(book => {
+        let el = `
+        <ul>
+        <li>Judul: ${book.title}</li>
+        <li>Penulis: ${book.author}</li>
+        <li>Tahun: ${book.year}</li>
+        <li>Status: ${book.isCompleted ? 'Selesai dibaca' : 'Belum selesai dibaca'}</li>
+        </ul>
+        <hr>
+        <br>
+        `
+        searchResult.innerHTML += el
+    });
 }
 
 function updateBook(id) {

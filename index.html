@@ -35,19 +35,20 @@
                 </div>
                 <div class="input_inline">
                     <label for="inputBookIsComplete">Selesai dibaca</label>
-                    <input id="inputBookIsComplete" type="checkbox">
+                    <input id="inputBookIsComplete" type="checkbox" onchange="checkComplete()">
                 </div>
                 <button id="bookSubmit" type="submit">Masukkan Buku ke rak <span>Belum selesai dibaca</span></button>
             </form>
         </section>
 
         <section class="search_section">
-            <h2>Cari Buku (Opsional)</h2>
+            <h2>Cari Buku</h2>
             <form id="searchBook">
-                <label for="searchBookTitle">Judul</label>
+                <label for="searchBookTitle">Judul/Penulis/Tahun</label>
                 <input id="searchBookTitle" type="text">
                 <button id="searchSubmit" type="submit">Cari</button>
             </form>
+            <div id="searchResult" class="book_list" style="width: 100%; padding: 20px;"></div>
         </section>
 
         <section class="book_shelf">
